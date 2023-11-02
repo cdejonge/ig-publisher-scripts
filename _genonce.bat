@@ -1,6 +1,8 @@
 @ECHO OFF
 SET publisher_jar=publisher.jar
-SET input_cache_path=%CD%\input-cache
+SET scriptfolder=%~dp0
+SET scriptfolder=%scriptfolder:~0,-1%
+SET input_cache_path=%scriptfolder%\input-cache
 
 ECHO Checking internet connection...
 PING tx.fhir.org -4 -n 1 -w 1000 | FINDSTR TTL && GOTO isonline

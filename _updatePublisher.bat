@@ -4,16 +4,11 @@ SETLOCAL
 
 SET dlurl=https://github.com/HL7/fhir-ig-publisher/releases/latest/download/publisher.jar
 SET publisher_jar=publisher.jar
-SET input_cache_path=%CD%\input-cache\
+SET scriptfolder=%~dp0
+SET scriptfolder=%scriptfolder:~0,-1%
+SET input_cache_path=%scriptfolder%\input-cache
 SET skipPrompts=false
 
-SET scriptdlroot=https://raw.githubusercontent.com/HL7/ig-publisher-scripts/main
-SET update_bat_url=%scriptdlroot%/_updatePublisher.bat
-SET gen_bat_url=%scriptdlroot%/_genonce.bat
-SET gencont_bat_url=%scriptdlroot%/_gencontinuous.bat
-SET gencont_sh_url=%scriptdlroot%/_gencontinuous.sh
-SET gen_sh_url=%scriptdlroot%/_genonce.sh
-SET update_sh_url=%scriptdlroot%/_updatePublisher.sh
 
 IF "%~1"=="/f" SET skipPrompts=y
 
@@ -153,66 +148,8 @@ SETLOCAL DisableDelayedExpansion
 
 
 :dl_script_1
-ECHO Updating _updatePublisher.sh
-call POWERSHELL -command if ('System.Net.WebClient' -as [type]) {(new-object System.Net.WebClient).DownloadFile(\"%update_sh_url%\",\"_updatePublisher.new.sh\") } else { Invoke-WebRequest -Uri "%update_sh_url%" -Outfile "_updatePublisher.new.sh" }
-if %ERRORLEVEL% == 0 goto upd_script_1
-echo "Errors encountered during download: %errorlevel%"
-goto dl_script_2
-:upd_script_1
-start copy /y "_updatePublisher.new.sh" "_updatePublisher.sh" ^&^& del "_updatePublisher.new.sh" ^&^& exit
-
-
-:dl_script_2
-ECHO Updating _genonce.bat
-call POWERSHELL -command if ('System.Net.WebClient' -as [type]) {(new-object System.Net.WebClient).DownloadFile(\"%gen_bat_url%\",\"_genonce.new.bat\") } else { Invoke-WebRequest -Uri "%gen_bat_url%" -Outfile "_genonce.bat" }
-if %ERRORLEVEL% == 0 goto upd_script_2
-echo "Errors encountered during download: %errorlevel%"
-goto dl_script_3
-:upd_script_2
-start copy /y "_genonce.new.bat" "_genonce.bat" ^&^& del "_genonce.new.bat" ^&^& exit
-
-:dl_script_3
-ECHO Updating _gencontinuous.bat
-call POWERSHELL -command if ('System.Net.WebClient' -as [type]) {(new-object System.Net.WebClient).DownloadFile(\"%gencont_bat_url%\",\"_gencontinuous.new.bat\") } else { Invoke-WebRequest -Uri "%gencont_bat_url%" -Outfile "_gencontinuous.bat" }
-if %ERRORLEVEL% == 0 goto upd_script_3
-echo "Errors encountered during download: %errorlevel%"
-goto dl_script_4
-:upd_script_3
-start copy /y "_gencontinuous.new.bat" "_gencontinuous.bat" ^&^& del "_gencontinuous.new.bat" ^&^& exit
-
-
-:dl_script_4
-ECHO Updating _genonce.sh
-call POWERSHELL -command if ('System.Net.WebClient' -as [type]) {(new-object System.Net.WebClient).DownloadFile(\"%gen_sh_url%\",\"_genonce.new.sh\") } else { Invoke-WebRequest -Uri "%gen_sh_url%" -Outfile "_genonce.sh" }
-if %ERRORLEVEL% == 0 goto upd_script_4
-echo "Errors encountered during download: %errorlevel%"
-goto dl_script_5
-:upd_script_4
-start copy /y "_genonce.new.sh" "_genonce.sh" ^&^& del "_genonce.new.sh" ^&^& exit
-
-:dl_script_5
-ECHO Updating _gencontinuous.sh
-call POWERSHELL -command if ('System.Net.WebClient' -as [type]) {(new-object System.Net.WebClient).DownloadFile(\"%gencont_sh_url%\",\"_gencontinuous.new.sh\") } else { Invoke-WebRequest -Uri "%gencont_sh_url%" -Outfile "_gencontinuous.sh" }
-if %ERRORLEVEL% == 0 goto upd_script_5
-echo "Errors encountered during download: %errorlevel%"
-goto dl_script_6
-:upd_script_5
-start copy /y "_gencontinuous.new.sh" "_gencontinuous.sh" ^&^& del "_gencontinuous.new.sh" ^&^& exit
-
-
-
-:dl_script_6
-ECHO Updating _updatePublisher.bat
-call POWERSHELL -command if ('System.Net.WebClient' -as [type]) {(new-object System.Net.WebClient).DownloadFile(\"%update_bat_url%\",\"_updatePublisher.new.bat\") } else { Invoke-WebRequest -Uri "%update_bat_url%" -Outfile "_updatePublisher.new.bat" }
-if %ERRORLEVEL% == 0 goto upd_script_6
-echo "Errors encountered during download: %errorlevel%"
-goto end
-:upd_script_6
-start copy /y "_updatePublisher.new.bat" "_updatePublisher.bat" ^&^& del "_updatePublisher.new.bat" ^&^& exit
-
-
-:end
-
+cd %scriptfolder%
+git pull
 
 IF "%skipPrompts%"=="true" (
   PAUSE
