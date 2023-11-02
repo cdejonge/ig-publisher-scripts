@@ -6,7 +6,7 @@ SET dlurl=https://github.com/HL7/fhir-ig-publisher/releases/latest/download/publ
 SET publisher_jar=publisher.jar
 SET scriptfolder=%~dp0
 SET scriptfolder=%scriptfolder:~0,-1%
-SET input_cache_path=%scriptfolder%\input-cache
+SET input_cache_path=%scriptfolder%\input-cache\
 SET skipPrompts=false
 
 
@@ -145,10 +145,7 @@ REM Download all batch files (and this one with a new name)
 
 SETLOCAL DisableDelayedExpansion
 
-
-
-:dl_script_1
-cd %scriptfolder%
+cd /d %scriptfolder%
 git pull
 
 IF "%skipPrompts%"=="true" (
